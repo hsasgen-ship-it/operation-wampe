@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Op. Wampe">
+<meta name="theme-color" content="#050d1a">
+<title>Operation Wampe – Heiko</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:#050d1a;color:#e2eeff;font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;font-size:18px}
+::-webkit-scrollbar{display:none}
+.bc{font-family:'Barlow Condensed',sans-serif}
+@keyframes pop{from{transform:scale(0.85);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#080f1e;border:1px solid #0d1a30;border-radius:14px;padding:20px;margin-bottom:14px;animation:fadeIn 0.3s ease}
+.lbl{font-size:12px;letter-spacing:3px;color:#4a6080;text-transform:uppercase;margin-bottom:10px}
+.pill{padding:11px 18px;border-radius:22px;border:1px solid #0d2040;background:transparent;color:#4a6080;font-size:16px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.pill.g{border-color:#22d3a0;background:#22d3a018;color:#22d3a0;font-weight:600}
+.pill.y{border-color:#f5c842;background:#f5c84218;color:#f5c842;font-weight:600}
+.pill.r{border-color:#f55a42;background:#f55a4218;color:#f55a42;font-weight:600}
+.tab-btn{flex:1;background:none;border:none;border-top:2px solid transparent;padding:12px 0 16px;display:flex;flex-direction:column;align-items:center;gap:5px;transition:border-color 0.2s;cursor:pointer}
+.tab-btn.active{border-top-color:#1d6ef5}
+.bw{height:5px;background:#0d2040;border-radius:3px}
+.bf{height:100%;border-radius:3px;transition:width 0.6s}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:44px;background:transparent;outline:none;cursor:pointer;padding:0;margin:0}
+input[type=range]::-webkit-slider-container{height:44px;display:flex;align-items:center}
+input[type=range]::-webkit-slider-runnable-track{height:8px;background:#2a4a7f;border-radius:4px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:40px;height:40px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 10px rgba(0,0,0,0.4);margin-top:-16px;cursor:pointer}
+input[type=range]::-moz-range-track{height:8px;background:#2a4a7f;border-radius:4px;border:none}
+input[type=range]::-moz-range-thumb{width:40px;height:40px;border-radius:50%;background:#fff;border:none;box-shadow:0 2px 10px rgba(0,0,0,0.4);cursor:pointer}
+select{background:#0d2040;color:#e2eeff;border:1px solid #1d6ef5;border-radius:10px;padding:14px 16px;font-size:18px;font-family:'DM Sans',sans-serif;width:100%;-webkit-appearance:none}
+textarea{background:#0d2040;border:1px solid #1d6ef5;border-radius:10px;padding:14px;color:#e2eeff;font-size:16px;font-family:'DM Sans',sans-serif;resize:none;width:100%;line-height:1.5}
+.essig{display:flex;align-items:center;gap:12px;background:#0a2010;border:2px solid #22d3a0;border-radius:12px;padding:14px;margin-bottom:14px}
+.btn-primary{background:#1d6ef5;border:none;border-radius:12px;color:#fff;font-size:20px;font-weight:700;padding:18px;width:100%;cursor:pointer;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
+.btn-green{background:#22d3a0;border:none;border-radius:12px;color:#000;font-size:20px;font-weight:700;padding:18px;width:100%;cursor:pointer;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px}
+.meal-block{background:#0d1a30;border-radius:12px;padding:16px;margin-bottom:12px}
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(5,13,26,0.95);align-items:center;justify-content:center;padding:24px">
+  <div style="background:#080f1e;border:2px solid #1d6ef5;border-radius:16px;padding:36px 28px;text-align:center;max-width:320px;width:100%;animation:pop 0.25s ease">
+    <div style="font-size:52px;margin-bottom:12px">🏆</div>
+    <div id="modal-title" class="bc" style="font-size:28px;font-weight:700;color:#1d6ef5;margin-bottom:12px"></div>
+    <div id="modal-msg" style="font-size:16px;color:#b0c4de;line-height:1.6;margin-bottom:24px"></div>
+    <button onclick="document.getElementById('modal').style.display='none'" class="btn-primary">OK</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="padding-bottom:90px;background:#050d1a;min-height:100vh">
+
+  <!-- HEADER -->
+  <div style="padding:20px 20px 16px;border-bottom:1px solid #0d2040;background:#050d1a">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="bc" style="font-size:13px;letter-spacing:3px;color:#4a6080;text-transform:uppercase">OPERATION WAMPE</div>
+        <div id="hdr-day" class="bc" style="font-size:58px;font-weight:700;color:#e2eeff;line-height:1"></div>
+        <div id="hdr-date" style="font-size:16px;color:#4a6080;margin-top:2px"></div>
+        <div id="hdr-challenge" class="bc" style="font-size:20px;font-weight:700;color:#f5c842;margin-top:4px"></div>
+      </div>
+      <div style="text-align:right;padding-top:8px">
+        <div id="hdr-kcal" class="bc" style="font-size:32px;font-weight:700;color:#1d6ef5"></div>
+        <div style="font-size:13px;color:#4a6080">kcal Ziel</div>
+        <div style="font-size:13px;color:#4a6080;margin-top:4px">120→100 kg</div>
+      </div>
+    </div>
+    <!-- Apfelessig Banner -->
+    <div class="essig" style="margin-top:14px;margin-bottom:0">
+      <div style="font-size:26px">🍶</div>
+      <div>
+        <div class="bc" style="font-size:18px;font-weight:700;color:#22d3a0;letter-spacing:1px">APFELESSIG VOR JEDEM ESSEN!</div>
+        <div style="font-size:13px;color:#4a6080">1 EL naturtrüb in Wasser · senkt Blutzucker · verbrennt Bauchfett</div>
+      </div>
+    </div>
+    <!-- Bauchumfang Montag -->
+    <div id="hdr-bauch" style="display:none;margin-top:10px"></div>
+    <!-- Progress -->
+    <div class="bw" style="margin-top:12px"><div id="hdr-progress" class="bf" style="width:0%;background:linear-gradient(90deg,#0d3a8a,#1d6ef5)"></div></div>
+  </div>
+
+  <div id="content" style="padding:16px 20px 0;background:#050d1a"></div>
+</div>
+
+<!-- NAV -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:#030b18;border-top:1px solid #0d2040;display:flex;z-index:50">
+  <button class="tab-btn active" id="tab-heute" onclick="switchTab('heute')">
+    <span style="font-size:22px;color:#1d6ef5">◎</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#1d6ef5;font-family:'DM Sans',sans-serif">Heute</span>
+  </button>
+  <button class="tab-btn" id="tab-plan" onclick="switchTab('plan')">
+    <span style="font-size:22px;color:#4a6080">▲</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4a6080;font-family:'DM Sans',sans-serif">Training</span>
+  </button>
+  <button class="tab-btn" id="tab-essen" onclick="switchTab('essen')">
+    <span style="font-size:22px;color:#4a6080">◈</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4a6080;font-family:'DM Sans',sans-serif">Essen</span>
+  </button>
+  <button class="tab-btn" id="tab-einkauf" onclick="switchTab('einkauf')">
+    <span style="font-size:22px;color:#4a6080">◻</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4a6080;font-family:'DM Sans',sans-serif">Einkauf</span>
+  </button>
+  <button class="tab-btn" id="tab-stats" onclick="switchTab('stats')">
+    <span style="font-size:22px;color:#4a6080">◆</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4a6080;font-family:'DM Sans',sans-serif">Stats</span>
+  </button>
+  <button class="tab-btn" onclick="showSettings()">
+    <span style="font-size:22px;color:#4a6080">⚙️</span>
+    <span style="font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#4a6080;font-family:'DM Sans',sans-serif">Key</span>
+  </button>
+</div>
+
+<script>
+// ── CONSTANTS ──────────────────────────────────────────────────────────────
+const KCAL = 2000;
+const DAYS_DE = ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+const MONTHS_DE = ['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+
+const PLAN = [
+  {day:"Mo", training:"🚴 Rad zur Arbeit · 55 Min", type:"ausdauer", note:"Fahrrad stehen lassen – Do zurückfahren!"},
+  {day:"Di", training:"💪 Krafttraining + Handball", type:"kraft", note:"Mehr essen heute!"},
+  {day:"Mi", training:"💪 Krafttraining", type:"kraft"},
+  {day:"Do", training:"🚴 Rad nach Hause · 55 Min", type:"ausdauer", note:"Fahrrad abholen!"},
+  {day:"Fr", training:"🧘 Dehnen · 20 Min", type:"dehnen", note:"Beine lockern"},
+  {day:"Sa", training:"🚴 Rad · 45 Min", type:"ausdauer"},
+  {day:"So", training:"😴 Ruhetag", type:"erholung", note:"Cheat Day möglich 🍕"},
+];
+
+const STRETCHING = [
+  {e:"🦵", name:"Waden-Dehnung", dauer:"60 Sek/Seite", desc:"An Wand, Ferse am Boden. Wadenanspannung spüren."},
+  {e:"🧘", name:"Hüftbeuger", dauer:"60 Sek/Seite", desc:"Ausfallschritt, hinteres Knie am Boden, Becken vor."},
+  {e:"🦵", name:"Oberschenkel vorne", dauer:"45 Sek/Seite", desc:"Ferse zum Gesäß, Knie zusammen."},
+  {e:"🧘", name:"Oberschenkel hinten", dauer:"60 Sek/Seite", desc:"Bein auf Stuhl, leicht vorbeugen."},
+  {e:"⬆️", name:"Waden-Pumpen", dauer:"3×20 Wdh.", desc:"Zehenstand heben/senken – Venenpumpe aktivieren!"},
+  {e:"🏋️", name:"Hocke halten", dauer:"60 Sek", desc:"Tief hocken, Fersen am Boden, Hüfte öffnen."},
+  {e:"🔄", name:"Beinkreisen", dauer:"10x/Seite", desc:"Auf Rücken, Bein gestreckt kreisen."},
+  {e:"🦶", name:"Fußgelenke kreisen", dauer:"10x/Seite", desc:"Im Sitzen, Fuß anheben und kreisen."},
+];
+
+// Mahlzeiten: Mittag (12 Uhr) = Hauptmahlzeit · Snack (15-16 Uhr) · Abend (18-19 Uhr) leicht
+// Gesamt ~2000 kcal · Fasten 16:8 von 20:00 bis 12:00
+const MEALS = [
+  {
+    mittag:{n:"Hähnchen-Salat-Box XXL",e:"🥗",k:750,p:"55g",
+      where:"🏢 Supermarkt – Salattheke",
+      t:"300g Hähnchenbrust + großer Salat + 2 Eier + Olivenöl + Zitrone. Kein Fertigdressing!"},
+    snack:{n:"Hüttenkäse + Gurke",e:"🧀",k:160,p:"24g",t:"200g Hüttenkäse + Gurke + Schnittlauch. 15–16 Uhr."},
+    abend:{n:"Lachs von der Plancha",e:"🐟",k:480,p:"42g",time:"15 Min",
+      port:"300g Lachs + Zucchini + Paprika",
+      ing:["300g Lachsfilet TK","Zucchini","Paprika","Dill, Zitrone","Olivenöl, Salz/Pfeffer"],
+      steps:["Plancha vorheizen","Gemüse 5 Min grillen","Lachs 3 Min/Seite, Dill + Zitrone drüber"]}
+  },
+  {
+    mittag:{n:"Thunfisch-Wrap + Salat",e:"🌯",k:680,p:"48g",
+      where:"🏢 Supermarkt – Kühlregal",
+      t:"2 Vollkorn-Wraps + 2 Dosen Thunfisch + Paprika + Gurke + Joghurt-Dip"},
+    snack:{n:"Skyr + Beeren",e:"🫐",k:150,p:"20g",t:"200g Skyr + Beeren + Zimt. 15–16 Uhr."},
+    abend:{n:"Hähnchen + Brokkoli Plancha",e:"🍗",k:520,p:"52g",time:"15 Min",
+      port:"350g Hähnchenbrust + 300g Brokkoli + Knoblauchquark",
+      fam:"Kids bekommen extra Reis dazu!",
+      ing:["350g Hähnchenbrust","300g Brokkoli","150g Knoblauchquark","Kurkuma, Paprika, Zitrone"],
+      steps:["Hähnchen würzen, Plancha 4 Min/Seite","Brokkoli 5 Min dämpfen","Mit Knoblauchquark servieren"]}
+  },
+  {
+    mittag:{n:"Hähnchen-Bowl mit Reis",e:"🍚",k:820,p:"52g",
+      where:"🏢 Supermarkt oder selbst",
+      t:"300g Hähnchenbrust + 150g Basmatireis + Gemüse + Kurkuma-Sauce"},
+    snack:{n:"2 Hartgekochte Eier",e:"🥚",k:140,p:"13g",t:"2 Eier + Salz/Pfeffer. Immer dabei haben!"},
+    abend:{n:"Hacksteaks von der Plancha",e:"🥩",k:480,p:"40g",time:"15 Min",
+      port:"300g Rinderhack (2 Steaks) + Zucchini",
+      fam:"Kids kriegen Pommes dazu – alle happy!",
+      ing:["300g Rinderhack","1 Ei","Petersilie, Oregano, Cumin","Zucchini"],
+      steps:["Hack + Ei + Kräuter kneten, Steaks formen","Plancha 4 Min/Seite","Mit Zucchini servieren"]}
+  },
+  {
+    mittag:{n:"Lachs-Salat-Box",e:"🐟",k:720,p:"50g",
+      where:"🏢 Supermarkt – Kühlregal",
+      t:"200g Räucherlachs + großer Salat + Hüttenkäse + Vollkornbrot"},
+    snack:{n:"Thunfisch pur",e:"🐠",k:120,p:"28g",t:"185g Dose Thunfisch + Zitrone + Pfeffer. 1 Min fertig."},
+    abend:{n:"Garnelen von der Plancha",e:"🍤",k:480,p:"44g",time:"10 Min",
+      port:"400g Garnelen + Paprika + Zitrone",
+      ing:["400g Garnelen TK","Paprika","Knoblauch, Zitrone, Petersilie","Paprikapulver, Olivenöl"],
+      steps:["Garnelen auftauen, würzen","Plancha sehr heiß – 2 Min/Seite","Zitrone + Petersilie drüber"]}
+  },
+  {
+    mittag:{n:"Sushi-Box + Edamame",e:"🍱",k:680,p:"38g",
+      where:"🏢 Supermarkt – Kühlregal",
+      t:"2 Sushi-Boxen (Nigiri/Maki) + 200g Edamame. Kein Tempura!"},
+    snack:{n:"Gemüsesticks + Quark-Dip",e:"🥕",k:140,p:"18g",t:"150g Quark + Paprika + Karotte + Gurke. 15–16 Uhr."},
+    abend:{n:"Rinderstreifen + Paprika Plancha",e:"🥩",k:520,p:"46g",time:"15 Min",
+      port:"350g Rinderstreifen + 2 Paprika + Koriander",
+      fam:"Kinder bekommen extra Reis dazu!",
+      ing:["350g Rinderstreifen","2 Paprika","1 Zwiebel","Kurkuma, Koriander, Zitrone"],
+      steps:["Fleisch + Gemüse würzen","Plancha heiß – 3 Min anbraten","Koriander + Zitrone drüber"]}
+  },
+  {
+    mittag:{n:"Hähnchen + Süßkartoffel",e:"🍠",k:780,p:"54g",
+      where:"🏢 Supermarkt oder selbst",
+      t:"350g Hähnchen + 1 Süßkartoffel + 250g Hüttenkäse-Dip + Brokkoli"},
+    snack:{n:"Magerquark + Zimt",e:"🥛",k:110,p:"24g",t:"200g Magerquark + Zimt. Einfach und sättigend."},
+    abend:{n:"Lachsfilet + Gemüse Plancha",e:"🐟",k:460,p:"40g",time:"15 Min",
+      port:"280g Lachs + Zucchini + Paprika + Dill",
+      fam:"Frau bekommt Avocado drauf!",
+      ing:["280g Lachsfilet TK","Zucchini","Paprika","Dill, Zitrone, Olivenöl"],
+      steps:["Plancha vorheizen, Gemüse 5 Min","Lachs 3 Min/Seite","Dill + Zitrone drüber"]}
+  },
+  {
+    mittag:{n:"Skyr + Vollkornbrot + Hüttenkäse",e:"🍞",k:680,p:"48g",
+      where:"🏠 Zuhause · 5 Min",
+      t:"400g Skyr + 3 Scheiben Vollkornbrot + 200g Hüttenkäse + Gurke + Tomate"},
+    snack:{n:"Reiswaffel + Quark",e:"🍘",k:170,p:"19g",t:"150g Quark auf 2 Reiswaffeln + Schnittlauch."},
+    abend:{n:"Süßkartoffel + Quark-Dip",e:"🍠",k:480,p:"32g",time:"15 Min",
+      port:"2 kleine Süßkartoffeln + 200g Quark-Dip + Kräuter",
+      fam:"Frau & Kids essen mit – alle happy!",
+      ing:["2 kleine Süßkartoffeln","200g Magerquark","Schnittlauch, Dill","Salz/Pfeffer, Zitrone"],
+      steps:["Süßkartoffeln 10 Min Mikrowelle","Quark mit Kräutern verrühren","Aufschneiden, Dip drauf"]}
+  },
+];
+
+const SHOPPING = [
+  {cat:"🥩 Protein", items:["Hähnchenbrust 500g","Rinderhack 400g","Rinderstreifen 500g","Garnelen TK 400g","Lachs TK 500g","Thunfisch Dose ×6","Eier 10er","Magerquark 500g","Hüttenkäse 500g","Skyr 500g","Joghurt 3,5%"]},
+  {cat:"🥦 Gemüse", items:["Zucchini ×2","Paprika ×4","Gurke ×3","Rucola 100g","Zwiebeln ×4","Knoblauch","Ingwer frisch","Karotten ×6","Süßkartoffeln ×4","Brokkoli ×2"]},
+  {cat:"🌾 Basis", items:["Haferflocken 500g","Rote Linsen 500g","Kichererbsen Dose ×2","Tomaten Dose ×2","Vollkorn-Tortillas","Reiswaffeln","Basmatireis 500g","Beeren TK 500g"]},
+  {cat:"🌿 Gewürze", items:["Kurkuma","Kreuzkümmel","Paprikapulver","Oregano","Zimt","Petersilie frisch","Dill frisch","Schnittlauch","Koriander frisch","Apfelessig naturtrüb (mit der Mutter)"]},
+];
+
+const DRILL = [
+  "Heiko, 120 auf 100. Zahlen. Keine Ausreden – nur Arbeit.",
+  "Fasten läuft. Körper verbrennt Fett. Nicht stören.",
+  "Viszeralfett hasst: Schlaf, Protein, Bewegung. Du hast alle drei.",
+  "Die Kids essen Pommes, Heiko? Du grillst auf der Plancha daneben.",
+  "Kein Jojo. 500 kcal Defizit. Jeden Tag. Fertig.",
+  "Kurkuma, Ingwer, Knoblauch – deine Leber sagt danke!",
+  "2 Kilo pro Monat. Realistisch. Dein Ding.",
+  "46 Jahre – dein Körper kann sich noch komplett verändern.",
+  "Apfelessig vor dem Essen. Jeden Tag. Kein Verhandeln.",
+  "Handball + Kraft am Dienstag? Iss mehr. Verdient!",
+  "Müde Beine? Dehnen heute. 20 Minuten. Fertig.",
+  "Schlaf unter 7h = Cortisol hoch = Bauchfett bleibt. Früher schlafen!",
+  "Du machst das für dich und deine Familie. Jeden Tag näher dran.",
+];
+
+const CONGRATS = [
+  {title:"HEIKO GEWINNT!",msg:"Das Fett weiß es noch nicht – aber es geht."},
+  {title:"BOOM. ERLEDIGT.",msg:"Viszeralfett verloren. Niemand kann dir das nehmen."},
+  {title:"MEGA TRAINIERT!",msg:"Dein Körper dankt dir heute Nacht. Verdient."},
+  {title:"STARK, HEIKO!",msg:"Das war Disziplin. Morgen wieder."},
+  {title:"TAG ABGEHAKT!",msg:"So wird aus 120 irgendwann 100, Heiko!"},
+];
+
+// ── STATE ──────────────────────────────────────────────────────────────────
+let tab = 'heute';
+
+function load(k,d){try{const v=localStorage.getItem(k);return v!=null?JSON.parse(v):d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+
+function todayKey(){return new Date().toISOString().slice(0,10);}
+function getDayIdx(){const d=new Date().getDay();return d===0?6:d-1;}
+function getTodayMeals(){return MEALS[new Date().getDay()%MEALS.length];}
+
+let weeklyPlan = load('plan3', PLAN);
+let tracker = load('tracker3', {});
+let doneDays = load('doneDays3', {});
+let shopChecked = load('shop3', {});
+
+// ── HEADER ─────────────────────────────────────────────────────────────────
+function updateHeader(){
+  const now = new Date();
+  const di = getDayIdx();
+  const tp = weeklyPlan[di];
+
+  document.getElementById('hdr-day').textContent = DAYS_DE[now.getDay()];
+  document.getElementById('hdr-date').textContent = now.getDate()+'. '+MONTHS_DE[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('hdr-kcal').textContent = KCAL;
+
+  // 30-Tage-Challenge – automatisch mit Tag 1 starten wenn noch kein Start
+  let start = load('challengeStart', null);
+  if(!start){
+    start = new Date().toISOString();
+    save('challengeStart', start);
+  }
+  const cd = document.getElementById('hdr-challenge');
+  const pb = document.getElementById('hdr-progress');
+  const diff = Math.floor((now - new Date(start))/(1000*60*60*24))+1;
+  const day = Math.min(diff,30);
+  const pct = Math.round((day/30)*100);
+  if(cd){
+    if(day<=30){
+      cd.innerHTML = '<div style="font-size:13px;letter-spacing:3px;color:#4a6080;text-transform:uppercase;margin-top:6px">Challenge</div>'
+        +'<div class="bc" style="font-size:90px;font-weight:700;color:#f5c842;line-height:1">TAG '+day+'</div>'
+        +'<div style="font-size:14px;color:#4a6080;margin-top:2px">von 30 · '+pct+'% geschafft</div>';
+      if(pb) pb.style.width = pct+'%';
+    } else {
+      cd.innerHTML = '<div class="bc" style="font-size:60px;font-weight:700;color:#22d3a0;line-height:1">TAG 30</div>'
+        +'<div style="font-size:16px;color:#22d3a0;margin-top:4px">🏆 CHALLENGE ABGESCHLOSSEN!</div>';
+      if(pb) pb.style.width = '100%';
+    }
+  }
+
+  // Bauchumfang Sonntag Abend
+  const bb = document.getElementById('hdr-bauch');
+  if(now.getDay()===0 && load('lastBauch','')<todayKey()){
+    const hist = load('bauchHist',[]);
+    const last = hist.length ? hist[hist.length-1].cm : null;
+    bb.style.display = 'block';
+    bb.innerHTML = '<div style="background:#1a0a2d;border:2px solid #a78bfa;border-radius:10px;padding:14px">'
+      +'<div class="bc" style="font-size:20px;font-weight:700;color:#a78bfa;margin-bottom:6px">📏 SONNTAG = BAUCHUMFANG MESSEN!</div>'
+      +'<div style="font-size:14px;color:#4a6080;margin-bottom:10px">Nüchtern, auf Bauchnabelhöhe.'+(last?' Letzter Wert: <b style="color:#e2eeff">'+last+' cm</b>':' Erster Messwert!')+'</div>'
+      +'<div style="display:flex;gap:10px;align-items:center">'
+      +'<input type="number" id="bauch-inp" placeholder="z.B. 112" style="flex:1;background:#0d2040;border:1px solid #a78bfa;border-radius:8px;padding:12px;color:#e2eeff;font-size:18px;font-family:DM Sans,sans-serif">'
+      +'<span style="color:#4a6080">cm</span>'
+      +'<button onclick="saveBauch()" style="background:#a78bfa;border:none;border-radius:8px;color:#fff;font-size:16px;font-weight:700;padding:12px 16px;cursor:pointer">💾</button>'
+      +'</div></div>';
+  } else {
+    bb.style.display = 'none';
+  }
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function render(){
+  const content = document.getElementById('content');
+  const di = getDayIdx();
+  const tp = weeklyPlan[di];
+  const td = tracker[todayKey()] || {};
+  const meals = getTodayMeals();
+  const total = meals.mittag.k + meals.snack.k + meals.abend.k;
+  const drill = DRILL[new Date().getDay() % DRILL.length];
+  const allDone = td.food && td.sport !== undefined && td.fasten && td.stress && td.bewegung && td.schlaf !== undefined;
+
+  if(tab==='heute'){
+    // Fasten status
+    const now = new Date();
+    const t = now.getHours()*60+now.getMinutes();
+    const fs = 12*60, fe = 20*60;
+    let fLabel, fSub, fColor, fPct;
+    if(t>=fs&&t<fe){
+      const r=fe-t; fLabel='✅ Essensfenster offen'; fColor='#22d3a0';
+      fSub='Noch '+Math.floor(r/60)+'h '+(r%60)+'min · Bis 20:00 Uhr'; fPct=((t-fs)/(fe-fs))*100;
+    } else if(t<fs){
+      const r=fs-t; fLabel='🔵 Fasten aktiv'; fColor='#1d6ef5';
+      fSub='Essen ab 12:00 Uhr · noch '+Math.floor(r/60)+'h '+(r%60)+'min'; fPct=(t/fs)*100;
+    } else {
+      const r=24*60-t+fs; fLabel='🔴 Nichts mehr essen!'; fColor='#f55a42';
+      fSub='Nach 20 Uhr nix mehr · Nächstes Essen um 12:00'; fPct=100;
+    }
+
+    const sportColor = doneDays[di] ? '#22d3a0' : '#f5c842';
+
+    // Kalorienverbrauch durch Sport berechnen
+    const MET = {'Laufen':9,'Krafttraining':6,'Gehen':4,'Handball':10,'Radfahren':8,'Dehnen':3,'Sonstiges':5};
+    const gewicht = 120;
+    const sportArt = td.sportArt || '';
+    const sportMin = td.sportMin || 0;
+    const sportLevel = td.sportLevel || 0; // 0=leicht,1=mittel,2=schwer
+    const levelFaktor = [0.8, 1.0, 1.25][sportLevel];
+    const met = MET[sportArt] || 5;
+    const sportKcal = Math.round(met * gewicht * (sportMin/60) * levelFaktor);
+    const sportIntensLabel = ['Leicht','Mittel','Schwer'][sportLevel];
+    const nettoKcal = KCAL + sportKcal;
+
+    content.innerHTML = [
+
+      // ─── 1. TAGESBEFEHL ───────────────────────────────────────
+      '<div class="card" style="border-left:4px solid #1d6ef5">',
+        '<div class="bc" style="font-size:26px;font-weight:700;margin-bottom:6px;color:#e2eeff">',
+          (PLAN[di].type==='kraft'?'💪 Krafttag, Heiko!':
+           PLAN[di].type==='ausdauer'?'🚴 Ausdauer-Tag, Heiko!':
+           PLAN[di].type==='dehnen'?'🧘 Dehntag, Heiko!':'😴 Erholungstag, Heiko!'),
+        '</div>',
+        '<div style="font-size:16px;color:#4a6080;font-style:italic">"'+drill+'"</div>',
+      '</div>',
+
+      // ─── 2. AMPEL ────────────────────────────────────────────
+      '<div class="card">',
+        '<div class="lbl">Tages-Ampel</div>',
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">',
+          ampelBox('FASTEN', fLabel, fColor, fSub),
+          ampelBox('SPORT', sportMin>0?'✅ '+sportMin+' Min':'🟡 Ausstehend', sportMin>0?'#22d3a0':'#f5c842', sportArt||tp.training),
+          ampelBox('ESSEN', td.food==='gut'?'✅ Gesund':td.food==='mixed'?'⚠️ Gemischt':td.food==='cheat'?'🍔 Cheat':'⬜ Offen',
+            td.food==='gut'?'#22d3a0':td.food==='cheat'?'#f55a42':td.food==='mixed'?'#f5c842':'#4a6080',''),
+          ampelBox('SCHLAF', (td.schlaf||0)>0?(td.schlaf||0)+'h':'⬜ Offen',
+            (td.schlaf||0)>=7?'#22d3a0':(td.schlaf||0)>=6?'#f5c842':(td.schlaf||0)>0?'#f55a42':'#4a6080',''),
+        '</div>',
+      '</div>',
+
+      // ─── 3. FASTEN ───────────────────────────────────────────
+      '<div class="card" style="border-color:'+fColor+'44">',
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">',
+          '<div class="lbl" style="margin:0">⏰ Fasten 16:8</div>',
+          '<div style="font-size:15px;font-weight:600;color:'+fColor+'">'+fLabel+'</div>',
+        '</div>',
+        '<div class="bw"><div class="bf" style="width:'+fPct+'%;background:'+fColor+'"></div></div>',
+        '<div style="font-size:15px;color:#4a6080;margin-top:6px">'+fSub+'</div>',
+        '<div style="font-size:14px;color:#4a6080;margin-top:4px">☕ Kaffee morgens OK · Essen 12–20 Uhr</div>',
+      '</div>',
+
+      // ─── 4. TRAINING ─────────────────────────────────────────
+      '<div class="card" style="border:2px solid '+(sportMin>0?'#22d3a0':'#f5c842')+'44">',
+        '<div class="lbl">💪 Training heute · '+tp.day+'</div>',
+        '<div class="bc" style="font-size:22px;font-weight:700;color:#e2eeff;margin-bottom:14px">'+tp.training+'</div>',
+
+        // Dropdown
+        '<select onchange="setTrack(\'sportArt\',this.value)" style="margin-bottom:14px">',
+          '<option value="">-- Was hast du gemacht? --</option>',
+          ['Laufen','Krafttraining','Gehen','Handball','Radfahren','Dehnen','Sonstiges'].map(function(s){
+            return '<option value="'+s+'"'+(td.sportArt===s?' selected':'')+'>'+s+'</option>';
+          }).join(''),
+        '</select>',
+
+        // Dauer Schieber
+        slider('sportMin','Dauer',0,120,5,td.sportMin||0,' Min',
+          [['0','30','60','90','120']],'#22d3a0'),
+
+        // Intensität Schieber
+        slider('sportLevel','Intensität',0,2,1,td.sportLevel||0,'',
+          [['Leicht','Mittel','Schwer']],'#1d6ef5',['Leicht','Mittel','Schwer']),
+
+        // Kalorien Verbrauch
+        sportMin>0&&sportArt?
+          '<div style="margin-top:10px;padding:12px;background:#0a2010;border-radius:10px;border:1px solid #22d3a0;display:flex;justify-content:space-between;align-items:center">'
+          +'<div>'
+          +'<div style="font-size:13px;color:#4a6080">'+sportArt+' · '+sportMin+' Min · '+sportIntensLabel+'</div>'
+          +'<div style="font-size:14px;color:#22d3a0;margin-top:2px">Kalorienverbrauch</div>'
+          +'</div>'
+          +'<div class="bc" style="font-size:32px;font-weight:700;color:#22d3a0">~'+sportKcal+' kcal</div>'
+          +'</div>'
+          +'<div style="margin-top:8px;padding:10px 12px;background:#001a10;border-radius:8px;font-size:14px;color:#22d3a0">'
+          +'🎯 Dein Netto-Kalorienziel heute: <strong>'+nettoKcal+' kcal</strong> ('+KCAL+' + '+sportKcal+' verbrannt)'
+          +'</div>'
+        :'<div style="margin-top:10px;font-size:14px;color:#4a6080">Trainingsart wählen → Kalorienverbrauch wird berechnet</div>',
+
+        // Erledigt Button
+        '<div style="margin-top:14px">',
+          doneDays[di]?'<div style="text-align:center;font-size:32px">✅ Training erledigt!</div>':
+            '<button onclick="markDone('+di+')" style="background:#f5c842;border:none;border-radius:10px;color:#000;font-size:18px;font-weight:700;padding:14px;width:100%;cursor:pointer">✓ Training als erledigt markieren</button>',
+        '</div>',
+      '</div>',
+
+      // ─── 5. ESSEN ────────────────────────────────────────────
+      '<div class="card">',
+        '<div class="bc" style="font-size:26px;font-weight:700;margin-bottom:16px">🍽️ Dein Essen heute</div>',
+
+        essigBanner(),
+        '<div class="meal-block" style="border-left:4px solid #1d6ef5;margin-bottom:12px">',
+          '<div style="font-size:12px;letter-spacing:2px;color:#f5c842;text-transform:uppercase;margin-bottom:8px">🍽️ 12:00 UHR · MITTAGESSEN</div>',
+          mealRow(meals.mittag),
+          meals.mittag.where?'<div style="font-size:13px;color:#7bb8f5;margin-top:4px">'+meals.mittag.where+'</div>':'',
+          '<div style="font-size:14px;color:#b0c4de;margin-top:6px">💡 '+meals.mittag.t+'</div>',
+        '</div>',
+
+        essigBanner(),
+        '<div class="meal-block" style="border-left:4px solid #a78bfa;margin-bottom:12px">',
+          '<div style="font-size:12px;letter-spacing:2px;color:#a78bfa;text-transform:uppercase;margin-bottom:8px">🥕 15–16 UHR · Snack</div>',
+          mealRow(meals.snack),
+          '<div style="font-size:14px;color:#b0c4de;margin-top:6px">💡 '+meals.snack.t+'</div>',
+        '</div>',
+
+        essigBanner(),
+        '<div class="meal-block" style="border-left:4px solid #22d3a0">',
+          '<div style="font-size:12px;letter-spacing:2px;color:#22d3a0;text-transform:uppercase;margin-bottom:8px">🌙 ABEND 18–19 Uhr · '+meals.abend.time+' · ⚠️ Nichts nach 20 Uhr!</div>',
+          mealRow(meals.abend),
+          meals.abend.fam?'<div style="font-size:13px;color:#7bb8f5;background:#001a2d;padding:8px 10px;border-radius:6px;margin:8px 0">👨‍👩‍👧 '+meals.abend.fam+'</div>':'',
+          '<div style="font-size:13px;color:#f5c842;background:#1a1500;padding:8px 10px;border-radius:6px;margin-bottom:8px">📏 '+meals.abend.port+'</div>',
+          meals.abend.steps.map(function(s,i){return '<div style="display:flex;gap:8px;margin-bottom:5px"><span style="color:#22d3a0;font-weight:700;min-width:18px">'+(i+1)+'</span><span style="font-size:14px;color:#b0c4de">'+s+'</span></div>';}).join(''),
+        '</div>',
+
+        // Summe
+        '<div style="margin-top:12px;padding:14px;background:#050d1a;border-radius:10px;border:1px solid #0d2040">',
+          '<div style="display:flex;flex-direction:column;gap:5px;margin-bottom:10px">',
+            '<div style="display:flex;justify-content:space-between;font-size:15px"><span style="color:#1d6ef5">🍽️ Mittag</span><span>'+meals.mittag.k+' kcal</span></div>',
+            '<div style="display:flex;justify-content:space-between;font-size:15px"><span style="color:#a78bfa">🥕 Snack</span><span>'+meals.snack.k+' kcal</span></div>',
+            '<div style="display:flex;justify-content:space-between;font-size:15px"><span style="color:#22d3a0">🔥 Abend</span><span>'+meals.abend.k+' kcal</span></div>',
+          '</div>',
+          '<div style="border-top:1px solid #0d2040;padding-top:10px;display:flex;justify-content:space-between;align-items:center">',
+            '<span style="font-size:16px;color:#4a6080">Gesamt</span>',
+            '<span class="bc" style="font-size:30px;font-weight:700;color:'+(total<=nettoKcal?'#22d3a0':'#f5c842')+'">'+total+' / '+nettoKcal+'</span>',
+          '</div>',
+        '</div>',
+
+        // Foto
+        '<div style="margin-top:14px;padding:14px;background:#0d1a30;border-radius:12px;border-left:4px solid #1d6ef5">',
+          '<div class="bc" style="font-size:20px;font-weight:700;margin-bottom:6px">📸 Kalorien per Foto</div>',
+          '<label for="food-photo" style="display:block;width:100%;padding:14px;background:#050d1a;border:2px dashed #1d6ef5;border-radius:10px;text-align:center;cursor:pointer;font-size:16px;color:#1d6ef5;font-weight:600">📷 Foto auswählen</label>',
+          '<input type="file" id="food-photo" accept="image/*" capture="environment" style="display:none" onchange="analyzeFood(this)">',
+          '<div id="photo-preview" style="margin-top:10px;display:none"><img id="preview-img" style="width:100%;border-radius:10px;max-height:200px;object-fit:cover"></div>',
+          '<div id="calorie-loading" style="margin-top:10px;display:none;text-align:center;color:#1d6ef5;font-size:16px">⏳ Claude analysiert...</div>',
+          '<div id="calorie-result" style="margin-top:10px;display:none;background:#050d1a;border-radius:10px;padding:14px;border:1px solid #22d3a0"><div id="calorie-text" style="font-size:15px;color:#e2eeff;line-height:1.7"></div></div>',
+        '</div>',
+      '</div>',
+
+      // ─── 6. ABEND-CHECK ──────────────────────────────────────
+      '<div class="card" style="border:2px solid '+(allDone?'#22d3a0':'#1d6ef5')+'">',
+        '<div class="bc" style="font-size:32px;font-weight:700;margin-bottom:4px">🌙 Abend-Check</div>',
+        '<div style="font-size:16px;color:#4a6080;margin-bottom:22px">2 Minuten – dann ist der Tag gespeichert, Heiko.</div>',
+
+        checkSection('🍽️ Essen heute?', [
+          pillBtn('food','gut','✅ Gesund', td),
+          pillBtn('food','mixed','⚠️ Gemischt', td),
+          pillBtn('food','cheat','🍔 Cheat', td),
+        ]),
+
+        checkSection('⏰ Fasten eingehalten?', [
+          pillBtn('fasten','ja','✅ Ja', td),
+          pillBtn('fasten','fast','⚠️ Fast', td),
+          pillBtn('fasten','nein','❌ Nein', td),
+        ]),
+
+        checkSection('🏃 Wie viel bewegt?', [
+          pillBtn('bewegung','viel','🟢 Viel', td),
+          pillBtn('bewegung','mittel','🟡 Mittel', td),
+          pillBtn('bewegung','wenig','🔴 Wenig', td),
+        ]),
+
+        checkSection('🧠 Wie war der Tag?', [
+          pillBtn('stress','low','😌 Gut', td),
+          pillBtn('stress','medium','😐 Okay', td),
+          pillBtn('stress','high','😤 Stressig', td),
+        ]),
+
+        '<div style="margin-bottom:22px">',
+          '<div class="bc" style="font-size:22px;font-weight:700;margin-bottom:12px">😴 Schlaf letzte Nacht?</div>',
+          slider('schlaf','Stunden',0,12,0.5,td.schlaf||0,'h',
+            [['0h','3h','6h','7h✅','9h','12h']],(td.schlaf||0)>=7?'#22d3a0':(td.schlaf||0)>=6?'#f5c842':'#f55a42'),
+          '<div style="margin-top:6px;font-size:14px;color:'+((td.schlaf||0)>=7?'#22d3a0':(td.schlaf||0)>=6?'#f5c842':(td.schlaf||0)>0?'#f55a42':'#4a6080')+'">',
+            (td.schlaf||0)>=8?'🟢 Perfekt! Cortisol niedrig.'
+            :(td.schlaf||0)>=7?'🟢 Gut! Ziel erreicht.'
+            :(td.schlaf||0)>=6?'🟡 Okay – morgen früher!'
+            :(td.schlaf||0)>0?'🔴 Zu wenig – Bauchfett bleibt!':'',
+          '</div>',
+        '</div>',
+
+        '<div style="margin-bottom:22px">',
+          '<div class="bc" style="font-size:22px;font-weight:700;margin-bottom:12px">🍽️ Wie gut gegessen?</div>',
+          slider('essenQual','Qualität',0,10,1,td.essenQual||5,'/10',
+            [['0','2','4','6','8','10']],'#f5c842'),
+          slider('essenKcal','Gegessene Kalorien',500,3000,50,td.essenKcal||KCAL,' kcal',
+            [['500','1000','1500','2000✅','2500','3000']],'#1d6ef5'),
+        '</div>',
+
+        '<button onclick="saveDay()" class="'+(allDone?'btn-green':'btn-primary')+'">',
+          allDone?'✅ TAG GESPEICHERT!':'💾 TAG SPEICHERN',
+        '</button>',
+
+        // Sonntag: Bauchumfang direkt im Abend-Check
+        now.getDay()===0 ? [
+          '<div style="margin-top:20px;padding:16px;background:#1a0a2d;border:2px solid #a78bfa;border-radius:12px">',
+            '<div class="bc" style="font-size:22px;font-weight:700;color:#a78bfa;margin-bottom:6px">📏 Sonntags-Messung</div>',
+            '<div style="font-size:14px;color:#4a6080;margin-bottom:14px">Nüchtern messen – beide Werte eintragen!</div>',
+            // Gewicht
+            '<div style="margin-bottom:14px">',
+              '<div style="font-size:15px;color:#e2eeff;font-weight:600;margin-bottom:8px">⚖️ Gewicht</div>',
+              '<div style="display:flex;gap:10px;align-items:center">',
+                '<input type="number" id="gew-inp" placeholder="z.B. 118" value="'+(td.gewicht||'')+'" step="0.1"',
+                '  style="flex:1;background:#0d2040;border:1px solid #1d6ef5;border-radius:8px;padding:12px;color:#e2eeff;font-size:20px;font-family:DM Sans,sans-serif">',
+                '<span style="font-size:18px;color:#4a6080;font-weight:600">kg</span>',
+                '<button onclick="saveGewicht()" style="background:#1d6ef5;border:none;border-radius:8px;color:#fff;font-size:16px;font-weight:700;padding:12px 16px;cursor:pointer">💾</button>',
+              '</div>',
+              td.gewicht ? '<div style="font-size:14px;color:#22d3a0;margin-top:6px">✅ '+td.gewicht+' kg gespeichert!</div>' : '',
+            '</div>',
+            // Bauchumfang
+            '<div>',
+              '<div style="font-size:15px;color:#e2eeff;font-weight:600;margin-bottom:8px">📏 Bauchumfang</div>',
+              '<div style="font-size:13px;color:#4a6080;margin-bottom:8px">'+(load('bauchHist',[]).length ? 'Letzter Wert: <b style="color:#e2eeff">'+load('bauchHist',[]).slice(-1)[0].cm+' cm</b>' : 'Erster Messwert!')+'</div>',
+              '<div style="display:flex;gap:10px;align-items:center">',
+                '<input type="number" id="bauch-check-inp" placeholder="z.B. 112" value="'+(td.bauchUmfang||'')+'"',
+                '  style="flex:1;background:#0d2040;border:1px solid #a78bfa;border-radius:8px;padding:12px;color:#e2eeff;font-size:20px;font-family:DM Sans,sans-serif">',
+                '<span style="font-size:18px;color:#4a6080;font-weight:600">cm</span>',
+                '<button onclick="saveBauchCheck()" style="background:#a78bfa;border:none;border-radius:8px;color:#fff;font-size:16px;font-weight:700;padding:12px 16px;cursor:pointer">💾</button>',
+              '</div>',
+              td.bauchUmfang ? '<div style="font-size:14px;color:#22d3a0;margin-top:6px">✅ '+td.bauchUmfang+' cm gespeichert!</div>' : '',
+            '</div>',
+          '</div>',
+        ].join('') : '',
+      '</div>',
+
+    ].join('');
+  }
+
+  else if(tab==='plan'){
+    const rows = weeklyPlan.map(function(d,i){
+      const color = d.type==='kraft'?'#1d6ef5':d.type==='ausdauer'?'#22d3a0':d.type==='dehnen'?'#a78bfa':'#4a6080';
+      return '<div class="card" style="border-left:4px solid '+(doneDays[i]?'#22d3a0':i===getDayIdx()?'#1d6ef5':'#0d2040')+';opacity:'+(d.active===false?'0.5':'1')+'">'
+        +'<div style="display:flex;justify-content:space-between;align-items:center">'
+        +'<div><div style="font-size:11px;color:'+(i===getDayIdx()?'#1d6ef5':'#4a6080')+';letter-spacing:2px;text-transform:uppercase;margin-bottom:4px">'+d.day+(i===getDayIdx()?' · Heute':'')+'</div>'
+        +'<div class="bc" style="font-size:20px;font-weight:700;color:'+(doneDays[i]?'#22d3a0':color)+'">'+d.training+'</div>'
+        +(d.note?'<div style="font-size:13px;color:#f5c842;margin-top:3px">⚡ '+d.note+'</div>':'')
+        +'</div>'
+        +(doneDays[i]?'<span style="font-size:28px">✅</span>':
+          i===getDayIdx()&&d.active!==false?'<button onclick="markDone('+i+')" style="background:#f5c842;border:none;border-radius:8px;color:#000;font-size:15px;font-weight:700;padding:10px 14px;cursor:pointer">✓</button>':'')
+        +'</div></div>';
+    }).join('');
+
+    const stretch = STRETCHING.map(function(s){
+      return '<div style="padding:12px 0;border-bottom:1px solid #0d1a30">'
+        +'<div style="display:flex;justify-content:space-between;align-items:center">'
+        +'<div style="font-size:16px;font-weight:600">'+s.e+' '+s.name+'</div>'
+        +'<div style="font-size:13px;color:#a78bfa">'+s.dauer+'</div>'
+        +'</div>'
+        +'<div style="font-size:14px;color:#4a6080;margin-top:3px">'+s.desc+'</div>'
+        +'</div>';
+    }).join('');
+
+    content.innerHTML = rows
+      +'<div class="card" style="border-color:#a78bfa44"><div class="lbl">Dehnen & Durchblutung 🧘</div>'+stretch+'</div>';
+  }
+
+  else if(tab==='essen'){
+    const allMeals = MEALS.map(function(m,i){
+      return '<div class="card">'
+        +'<div class="bc" style="font-size:16px;font-weight:700;color:#f5c842;margin-bottom:12px">'+['So','Mo','Di','Mi','Do','Fr','Sa'][i%7]+'</div>'
+        +'<div class="meal-block" style="border-left:3px solid #1d6ef5;margin-bottom:8px">'+mealRow(m.mittag)+'<div style="font-size:13px;color:#7bb8f5;margin-top:3px">'+(m.mittag.where||'')+'</div><div style="font-size:13px;color:#b0c4de;margin-top:3px">💡 '+m.mittag.t+'</div></div>'
+        +'<div class="meal-block" style="border-left:3px solid #a78bfa;margin-bottom:8px">'+mealRow(m.snack)+'<div style="font-size:13px;color:#b0c4de;margin-top:4px">💡 '+m.snack.t+'</div></div>'
+        +'<div class="meal-block" style="border-left:3px solid #22d3a0">'+mealRow(m.abend)
+        +(m.abend.fam?'<div style="font-size:12px;color:#7bb8f5;background:#001a2d;padding:6px 10px;border-radius:6px;margin-top:6px">👨‍👩‍👧 '+m.abend.fam+'</div>':'')
+        +'<div style="margin-top:8px">'+m.abend.steps.map(function(s,j){return '<div style="display:flex;gap:8px;margin-bottom:4px"><span style="color:#22d3a0;font-weight:700;min-width:16px">'+(j+1)+'</span><span style="font-size:13px;color:#b0c4de">'+s+'</span></div>';}).join('')+'</div>'
+        +'</div></div>';
+    }).join('');
+    content.innerHTML = '<div class="lbl" style="margin-bottom:12px">7-TAGE MAHLZEITEN-PLAN</div>'+allMeals;
+  }
+
+  else if(tab==='einkauf'){
+    const total_costs = '<div class="card" style="border:2px solid #1d6ef5">'
+      +'<div class="bc" style="font-size:26px;font-weight:700;margin-bottom:14px">💶 Wochenkosten</div>'
+      +[{cat:'🥩 Protein',min:32,max:38},{cat:'🥦 Gemüse',min:15,max:20},{cat:'🌾 Basis',min:12,max:16},{cat:'🌿 Gewürze',min:6,max:10}].map(function(r){
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #0d1a30">'
+          +'<span style="font-size:16px">'+r.cat+'</span>'
+          +'<span class="bc" style="font-size:18px;font-weight:700;color:#22d3a0">~'+r.min+'–'+r.max+' €</span>'
+          +'</div>';
+      }).join('')
+      +'<div style="border-top:2px solid #1d6ef5;padding-top:12px;margin-top:4px;display:flex;justify-content:space-between;align-items:center">'
+      +'<span style="font-size:18px;color:#e2eeff;font-weight:600">Gesamt pro Woche</span>'
+      +'<span class="bc" style="font-size:38px;font-weight:700;color:#22d3a0">~75 €</span>'
+      +'</div>'
+      +'<div style="margin-top:12px;padding:12px;background:#001a10;border-radius:8px;border:1px solid #0d3a20;font-size:14px;color:#22d3a0;line-height:1.8">'
+      +'💡 Lachs & Garnelen TK kaufen · Hähnchenschenkel statt Brust · Linsen groß kaufen'
+      +'</div></div>';
+
+    const checkedCount = Object.values(shopChecked).filter(Boolean).length;
+    const totalItems = SHOPPING.reduce(function(s,c){return s+c.items.length;},0);
+
+    const listHtml = SHOPPING.map(function(cat,ci){
+      return '<div class="card">'
+        +'<div class="bc" style="font-size:18px;font-weight:700;color:#1d6ef5;margin-bottom:10px;text-transform:uppercase">'+cat.cat+'</div>'
+        +cat.items.map(function(item,ji){
+          const k=ci+'-'+ji, chk=shopChecked[k];
+          return '<div onclick="toggleShop(\''+k+'\')" style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:'+(ji<cat.items.length-1?'1px solid #0d1a30':'none')+';cursor:pointer;opacity:'+(chk?0.3:1)+'">'
+            +'<div style="width:20px;height:20px;border-radius:5px;flex-shrink:0;border:2px solid '+(chk?'#22d3a0':'#4a6080')+';background:'+(chk?'#22d3a0':'transparent')+';display:flex;align-items:center;justify-content:center">'
+            +(chk?'<span style="font-size:12px;color:#050d1a;font-weight:700">✓</span>':'')
+            +'</div>'
+            +'<span style="font-size:16px;color:#e2eeff;text-decoration:'+(chk?'line-through':'none')+'">'+item+'</span>'
+            +'</div>';
+        }).join('')
+        +'</div>';
+    }).join('');
+
+    content.innerHTML = total_costs
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
+      +'<span style="font-size:15px;color:#4a6080">'+checkedCount+' von '+totalItems+' erledigt</span>'
+      +'<button onclick="clearShop()" style="background:none;border:none;color:#4a6080;font-size:14px;text-decoration:underline;cursor:pointer">Zurücksetzen</button>'
+      +'</div>'
+      +'<div class="bw" style="margin-bottom:14px"><div class="bf" style="width:'+Math.round(checkedCount/totalItems*100)+'%;background:#22d3a0"></div></div>'
+      +listHtml;
+  }
+
+  else if(tab==='stats'){
+    renderStats(content);
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────────
+function ampelBox(label, value, color, sub){
+  return '<div style="background:#0d1a30;border-radius:10px;padding:14px;border-left:4px solid '+color+'">'
+    +'<div style="font-size:12px;color:#4a6080;margin-bottom:4px">'+label+'</div>'
+    +'<div style="font-size:16px;font-weight:700;color:'+color+'">'+value+'</div>'
+    +(sub?'<div style="font-size:12px;color:#4a6080;margin-top:3px">'+sub+'</div>':'')
+    +'</div>';
+}
+
+function essigBanner(){
+  return '<div class="essig" style="margin-bottom:12px">'
+    +'<div style="font-size:22px">🍶</div>'
+    +'<div><div class="bc" style="font-size:18px;font-weight:700;color:#22d3a0">JETZT APFELESSIG!</div>'
+    +'<div style="font-size:13px;color:#4a6080">1 EL in großem Glas Wasser trinken!</div></div>'
+    +'</div>';
+}
+
+function mealRow(m){
+  return '<div style="display:flex;justify-content:space-between;align-items:center">'
+    +'<div class="bc" style="font-size:20px;font-weight:700">'+m.e+' '+m.n+'</div>'
+    +'<div style="text-align:right">'
+    +'<div style="font-size:14px;color:#22d3a0;font-weight:600">'+m.p+'</div>'
+    +'<div style="font-size:13px;color:#f5c842">'+m.k+' kcal</div>'
+    +(m.time?'<div style="font-size:12px;color:#4a6080">'+m.time+'</div>':'')
+    +'</div></div>';
+}
+
+function pillBtn(field, val, label, td){
+  const active = td[field]===val;
+  const col = val==='gut'||val==='ja'||val==='low'||val==='viel'?'g':val==='mixed'||val==='fast'||val==='medium'||val==='mittel'?'y':'r';
+  return '<button class="pill '+(active?col:'')+'" onclick="setTrack(\''+field+'\',\''+val+'\')">'+label+'</button>';
+}
+
+function checkSection(title, btns){
+  return '<div style="margin-bottom:22px">'
+    +'<div class="bc" style="font-size:22px;font-weight:700;margin-bottom:12px">'+title+'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">'+btns.join('')+'</div>'
+    +'</div>';
+}
+
+function slider(field, label, min, max, step, val, unit, ticks, color, labels){
+  const displayVal = labels ? (labels[Math.round((val-min)/(step||1))]||val) : val+unit;
+  return '<div style="margin-bottom:14px">'
+    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    +'<span style="font-size:16px;color:#e2eeff">'+label+'</span>'
+    +'<span class="bc" id="sl-'+field+'" style="font-size:22px;font-weight:700;color:'+color+'">'+displayVal+'</span>'
+    +'</div>'
+    +'<input type="range" min="'+min+'" max="'+max+'" step="'+(step||1)+'" value="'+val+'" '
+    +'oninput="updateSlider(\''+field+'\',this.value,'+(labels?'[\''+labels.join('\',\'')+'\']':'null')+',\''+unit+'\',\''+color+'\')" '
+    +'style="accent-color:'+color+'">'
+    +(ticks?'<div style="display:flex;justify-content:space-between;font-size:12px;color:#4a6080;margin-top:4px">'+ticks[0].map(function(t){return '<span>'+t+'</span>';}).join('')+'</div>':'')
+    +'</div>';
+}
+
+function updateSlider(field, val, labels, unit, color){
+  const parsed = parseFloat(val);
+  const displayVal = labels ? (labels[Math.round(parsed)]||parsed) : parsed+unit;
+  const el = document.getElementById('sl-'+field);
+  if(el){ el.textContent=displayVal; el.style.color=color; }
+  // Update track gradient
+  const inp = document.getElementById('inp-'+field);
+  if(inp){
+    const min=parseFloat(inp.min), max=parseFloat(inp.max);
+    const pct = Math.round(((parsed-min)/(max-min))*100);
+    inp.style.background = 'linear-gradient(to right,'+color+' '+pct+'%,#2a4a7f '+pct+'%)';
+  }
+  setTrack(field, parsed);
+}
+
+// ── STATS ──────────────────────────────────────────────────────────────────
+function svgChart(data, color, label, unit, targetLine, chartH, showDots){
+  if(!data.length) return '';
+  const W=320, H=chartH||120, PAD=36, PADR=10, PADT=16, PADB=28;
+  const vals = data.map(function(d){return d.v;});
+  const minV = Math.min.apply(null,vals), maxV = Math.max.apply(null,vals);
+  const rng = maxV-minV || 1;
+  const toX = function(i){return PAD + (i/(data.length-1||1))*(W-PAD-PADR);};
+  const toY = function(v){return PADT + (1-(v-minV)/rng)*(H-PADT-PADB);};
+
+  // Line path
+  const pts = data.map(function(d,i){return toX(i)+','+toY(d.v);}).join(' ');
+  const linePath = 'M'+pts.split(' ').join(' L');
+
+  // Fill path
+  const fillPath = linePath+' L'+toX(data.length-1)+','+(H-PADB)+' L'+toX(0)+','+(H-PADB)+' Z';
+
+  // Target line
+  const tLine = targetLine!=null && targetLine>=minV && targetLine<=maxV
+    ? '<line x1="'+PAD+'" y1="'+toY(targetLine)+'" x2="'+(W-PADR)+'" y2="'+toY(targetLine)+'" stroke="#22d3a0" stroke-width="1" stroke-dasharray="4,3" opacity="0.6"/>'
+    +'<text x="'+PAD+'" y="'+(toY(targetLine)-4)+'" fill="#22d3a0" font-size="9" font-family="DM Sans">Ziel '+targetLine+unit+'</text>'
+    : '';
+
+  // Y axis labels
+  const yLabels = [minV, (minV+maxV)/2, maxV].map(function(v,i){
+    const y = toY(v);
+    return '<text x="'+(PAD-4)+'" y="'+(y+4)+'" fill="#4a6080" font-size="9" font-family="DM Sans" text-anchor="end">'+Math.round(v)+unit+'</text>';
+  }).join('');
+
+  // X labels (every few)
+  const step = Math.max(1, Math.floor(data.length/5));
+  const xLabels = data.filter(function(_,i){return i%step===0||i===data.length-1;}).map(function(d,_,arr){
+    const idx = data.indexOf(d);
+    return '<text x="'+toX(idx)+'" y="'+(H-PADB+14)+'" fill="#4a6080" font-size="8" font-family="DM Sans" text-anchor="middle">'+d.label+'</text>';
+  }).join('');
+
+  // Dots
+  const dots = showDots ? data.map(function(d,i){
+    return '<circle cx="'+toX(i)+'" cy="'+toY(d.v)+'" r="3" fill="'+color+'" />';
+  }).join('') : '';
+
+  // Last value label
+  const lastX = toX(data.length-1), lastY = toY(vals[vals.length-1]);
+  const lastLabel = '<text x="'+(lastX+4)+'" y="'+(lastY+4)+'" fill="'+color+'" font-size="10" font-weight="bold" font-family="DM Sans">'+vals[vals.length-1]+unit+'</text>';
+
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible" xmlns="http://www.w3.org/2000/svg">'
+    +'<defs><linearGradient id="grad'+color.replace('#','')+'" x1="0" y1="0" x2="0" y2="1">'
+    +'<stop offset="0%" stop-color="'+color+'" stop-opacity="0.3"/>'
+    +'<stop offset="100%" stop-color="'+color+'" stop-opacity="0.02"/>'
+    +'</linearGradient></defs>'
+    +'<path d="'+fillPath+'" fill="url(#grad'+color.replace('#','')+')"/>'
+    +'<path d="'+linePath+'" fill="none" stroke="'+color+'" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'
+    +dots+tLine+yLabels+xLabels+lastLabel
+    +'</svg>';
+}
+
+function barChart(data, colors, H){
+  if(!data.length) return '';
+  const W=320, PAD=8, PADB=20;
+  const maxV = Math.max.apply(null, data.map(function(d){return d.v;})) || 1;
+  const bw = (W - PAD*2) / data.length;
+  const bars = data.map(function(d,i){
+    const bh = Math.max((d.v/maxV)*(H-PADB), d.v>0?4:0);
+    const x = PAD + i*bw + bw*0.1;
+    const w = bw*0.8;
+    const col = typeof colors==='function' ? colors(d.v, d) : (colors[i%colors.length]||'#1d6ef5');
+    return '<rect x="'+x+'" y="'+(H-PADB-bh)+'" width="'+w+'" height="'+bh+'" fill="'+col+'" rx="2"/>'
+      +'<text x="'+(x+w/2)+'" y="'+(H-PADB+13)+'" fill="#4a6080" font-size="8" font-family="DM Sans" text-anchor="middle">'+d.label+'</text>';
+  }).join('');
+  return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto" xmlns="http://www.w3.org/2000/svg">'+bars+'</svg>';
+}
+
+function donutChart(vals, colors, labels, size){
+  const total = vals.reduce(function(a,b){return a+b;},0)||1;
+  const r=40, cx=55, cy=55, sw=18;
+  let angle = -90;
+  const arcs = vals.map(function(v,i){
+    const pct = v/total;
+    const a1 = angle * Math.PI/180;
+    const a2 = (angle + pct*360) * Math.PI/180;
+    const x1=cx+r*Math.cos(a1), y1=cy+r*Math.sin(a1);
+    const x2=cx+r*Math.cos(a2), y2=cy+r*Math.sin(a2);
+    const large = pct>0.5?1:0;
+    const d = v>0 ? 'M'+x1+','+y1+' A'+r+','+r+' 0 '+large+',1 '+x2+','+y2 : '';
+    angle += pct*360;
+    return d ? '<path d="'+d+'" fill="none" stroke="'+colors[i]+'" stroke-width="'+sw+'" />' : '';
+  }).join('');
+  const legendItems = labels.map(function(l,i){
+    return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">'
+      +'<div style="width:10px;height:10px;border-radius:2px;background:'+colors[i]+';flex-shrink:0"></div>'
+      +'<div style="font-size:13px;color:#4a6080">'+l+': <b style="color:#e2eeff">'+vals[i]+'</b></div>'
+      +'</div>';
+  }).join('');
+  return '<div style="display:flex;align-items:center;gap:16px">'
+    +'<svg viewBox="0 0 110 110" style="width:100px;height:100px;flex-shrink:0" xmlns="http://www.w3.org/2000/svg">'+arcs+'</svg>'
+    +'<div>'+legendItems+'</div>'
+    +'</div>';
+}
+
+function renderStats(content){
+  const entries = Object.entries(tracker).sort(function(a,b){return a[0].localeCompare(b[0]);});
+  const last30 = entries.slice(-30);
+  const bauchHist = load('bauchHist',[]);
+  const gewHist = load('gewHist',[]);
+
+  if(entries.length===0 && bauchHist.length===0 && gewHist.length===0){
+    content.innerHTML = '<div class="card" style="text-align:center;padding:40px 20px">'
+      +'<div style="font-size:40px;margin-bottom:16px">📊</div>'
+      +'<div class="bc" style="font-size:22px;font-weight:700;color:#1d6ef5;margin-bottom:8px">Heiko, noch keine Daten</div>'
+      +'<div style="font-size:15px;color:#4a6080;line-height:1.6">Füll täglich den Abend-Check aus.<br>Sonntags Gewicht + Bauchumfang eintragen.<br>Nach ein paar Tagen siehst du deine Kurven.</div>'
+      +'</div>';
+    return;
+  }
+
+  // ── Kennzahlen ────────────────────────────────────────────────
+  const sportDays = entries.filter(function(x){return x[1].sportMin>0;}).length;
+  const goodFood = entries.filter(function(x){return x[1].food==='gut';}).length;
+  const cheatDays = entries.filter(function(x){return x[1].food==='cheat';}).length;
+  const goodSleep = entries.filter(function(x){return (x[1].schlaf||0)>=7;}).length;
+  const avgSleep = entries.length ? Math.round(entries.reduce(function(s,x){return s+(x[1].schlaf||0);},0)/entries.length*10)/10 : 0;
+  const avgSportMin = sportDays ? Math.round(entries.filter(function(x){return x[1].sportMin>0;}).reduce(function(s,x){return s+(x[1].sportMin||0);},0)/sportDays) : 0;
+  const fastenOk = entries.filter(function(x){return x[1].fasten==='ja';}).length;
+
+  // ── Gewicht + Bauchumfang Chart-Daten ────────────────────────
+  const gewChartData = gewHist.map(function(g){return {v:g.kg, label:g.date.slice(5)};});
+  const bauchChartData = bauchHist.map(function(b){return {v:b.cm, label:b.date.slice(5)};});
+
+  // ── Schlaf Chart-Daten ────────────────────────────────────────
+  const sleepData = last30.map(function(x){return {v:x[1].schlaf||0, label:x[0].slice(5)};});
+
+  // ── Sport Minuten Chart ───────────────────────────────────────
+  const sportData = last30.map(function(x){return {v:x[1].sportMin||0, label:x[0].slice(5)};});
+
+  // ── Ernährung Donut ───────────────────────────────────────────
+  const foodGut = entries.filter(function(x){return x[1].food==='gut';}).length;
+  const foodMixed = entries.filter(function(x){return x[1].food==='mixed';}).length;
+  const foodCheat = entries.filter(function(x){return x[1].food==='cheat';}).length;
+
+  // ── Training nach Art ─────────────────────────────────────────
+  const byArt = {};
+  entries.forEach(function(x){
+    const art = x[1].sportArt;
+    if(!art) return;
+    if(!byArt[art]) byArt[art]={count:0,totalMin:0};
+    byArt[art].count++;
+    byArt[art].totalMin += (x[1].sportMin||0);
+  });
+  const sportArten = Object.entries(byArt).filter(function(x){return x[0]!=='';});
+  const sportBarData = sportArten.map(function(x){return {v:x[1].count, label:x[0].slice(0,4)};});
+  const sportColors = ['#1d6ef5','#22d3a0','#f5c842','#a78bfa','#f55a42','#22d3a0','#1d6ef5'];
+
+  // ── Performance Score ─────────────────────────────────────────
+  const perfData = last30.map(function(x){
+    const d=x[1]; let score=0, max=0;
+    if(d.food!=null){max+=2;score+=d.food==='gut'?2:d.food==='mixed'?1:0;}
+    if(d.sportMin!=null){max+=2;score+=d.sportMin>=30?2:d.sportMin>0?1:0;}
+    if(d.schlaf!=null){max+=2;score+=(d.schlaf||0)>=7?2:(d.schlaf||0)>=6?1:0;}
+    if(d.stress!=null){max+=2;score+=d.stress==='low'?2:d.stress==='medium'?1:0;}
+    return {v:max>0?Math.round((score/max)*100):0, label:x[0].slice(5)};
+  });
+
+  const html = [
+    // ─── BACKUP ────────────────────────────────────────────────
+    '<div class="card" style="border:2px solid #22d3a0">',
+      '<div class="bc" style="font-size:22px;font-weight:700;margin-bottom:6px">💾 Daten-Backup</div>',
+      '<div style="font-size:14px;color:#4a6080;margin-bottom:14px">Einmal pro Woche exportieren und in iCloud/Google Drive speichern!</div>',
+      '<div style="display:flex;gap:10px">',
+        '<button onclick="exportData()" style="flex:1;background:#22d3a0;border:none;border-radius:10px;color:#000;font-size:16px;font-weight:700;padding:14px;cursor:pointer;font-family:\'Barlow Condensed\',sans-serif">⬇️ EXPORTIEREN</button>',
+        '<button onclick="importData()" style="flex:1;background:#0d2040;border:2px solid #22d3a0;border-radius:10px;color:#22d3a0;font-size:16px;font-weight:700;padding:14px;cursor:pointer;font-family:\'Barlow Condensed\',sans-serif">⬆️ IMPORTIEREN</button>',
+      '</div>',
+      '<div style="margin-top:10px;font-size:13px;color:#4a6080">',
+        '⚠️ Browserverlauf löschen = Datenverlust! Backup schützt dich.',
+      '</div>',
+    '</div>',
+    '<div class="card">',
+      '<div class="lbl">📊 Heikos Übersicht · '+entries.length+' Tage getrackt</div>',
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">',
+        statBox(sportDays,'Sport-Tage','#22d3a0','Ø '+avgSportMin+' Min'),
+        statBox(goodFood,'Gesund gegessen','#1d6ef5','von '+entries.length+' Tagen'),
+        statBox(goodSleep,'Gut geschlafen (7h+)','#a78bfa','Ø '+avgSleep+'h'),
+        statBox(fastenOk,'Fasten eingehalten','#22d3a0',''),
+      '</div>',
+    '</div>',
+
+    // ─── GEWICHT CHART ─────────────────────────────────────────
+    '<div class="card" style="border:2px solid #1d6ef5">',
+      '<div class="lbl">⚖️ Gewichtsverlauf</div>',
+      gewChartData.length>=2 ? [
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px">',
+          '<div>',
+            '<div class="bc" style="font-size:44px;font-weight:700;color:#1d6ef5">'+gewHist[gewHist.length-1].kg+' kg</div>',
+            '<div style="font-size:14px;color:#4a6080">aktuell</div>',
+          '</div>',
+          '<div style="text-align:right">',
+            '<div class="bc" style="font-size:26px;font-weight:700;color:'+(gewHist[0].kg>gewHist[gewHist.length-1].kg?'#22d3a0':'#f55a42')+'">',
+              (gewHist[0].kg>gewHist[gewHist.length-1].kg?'−':'+')+Math.abs(Math.round((gewHist[0].kg-gewHist[gewHist.length-1].kg)*10)/10)+' kg',
+            '</div>',
+            '<div style="font-size:13px;color:#4a6080">seit Start · Ziel: 100 kg</div>',
+          '</div>',
+        '</div>',
+        svgChart(gewChartData,'#1d6ef5','Gewicht','kg',100,140,true),
+      ].join('') : gewChartData.length===1 ?
+        '<div style="font-size:15px;color:#4a6080">Erster Wert: '+gewHist[0].kg+' kg. Nächste Messung Sonntag!</div>'
+        : '<div style="font-size:14px;color:#4a6080">Noch keine Daten. Sonntags eintragen!</div>',
+    '</div>',
+
+    // ─── BAUCHUMFANG CHART ─────────────────────────────────────
+    '<div class="card" style="border:2px solid #a78bfa">',
+      '<div class="lbl">📏 Bauchumfang-Verlauf</div>',
+      bauchChartData.length>=2 ? [
+        '<div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px">',
+          '<div>',
+            '<div class="bc" style="font-size:44px;font-weight:700;color:#a78bfa">'+bauchHist[bauchHist.length-1].cm+' cm</div>',
+            '<div style="font-size:14px;color:#4a6080">aktuell</div>',
+          '</div>',
+          '<div style="text-align:right">',
+            '<div class="bc" style="font-size:26px;font-weight:700;color:'+(bauchHist[0].cm>bauchHist[bauchHist.length-1].cm?'#22d3a0':'#f55a42')+'">',
+              (bauchHist[0].cm>bauchHist[bauchHist.length-1].cm?'−':'+')+Math.abs(Math.round((bauchHist[0].cm-bauchHist[bauchHist.length-1].cm)*10)/10)+' cm',
+            '</div>',
+            '<div style="font-size:13px;color:#4a6080">seit Start</div>',
+          '</div>',
+        '</div>',
+        svgChart(bauchChartData,'#a78bfa','Bauchumfang','cm',null,130,true),
+      ].join('') : bauchChartData.length===1 ?
+        '<div style="font-size:15px;color:#4a6080">Erster Wert: '+bauchHist[0].cm+' cm. Nächste Messung Sonntag!</div>'
+        : '<div style="font-size:14px;color:#4a6080">Noch keine Daten. Sonntags eintragen!</div>',
+    '</div>',
+
+    // ─── SPORT MINUTEN CHART ───────────────────────────────────
+    last30.length>1 ? [
+      '<div class="card">',
+        '<div class="lbl">💪 Sport-Minuten · letzte '+last30.length+' Tage</div>',
+        barChart(sportData, function(v){return v>=60?'#22d3a0':v>=30?'#1d6ef5':v>0?'#f5c842':'#0d2040';}, 100),
+        '<div style="display:flex;gap:12px;font-size:12px;color:#4a6080;margin-top:4px">',
+          '<span><span style="color:#22d3a0">■</span> 60+ Min</span>',
+          '<span><span style="color:#1d6ef5">■</span> 30–60</span>',
+          '<span><span style="color:#f5c842">■</span> unter 30</span>',
+        '</div>',
+      '</div>',
+    ].join('') : '',
+
+    // ─── SPORT NACH ART ────────────────────────────────────────
+    sportArten.length>0 ? [
+      '<div class="card">',
+        '<div class="lbl">🏃 Training nach Sportart</div>',
+        barChart(sportBarData, sportColors, 90),
+        '<div style="display:flex;flex-direction:column;gap:6px;margin-top:10px">',
+          sportArten.map(function(x,i){
+            return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #0d1a30">'
+              +'<div style="display:flex;align-items:center;gap:8px">'
+              +'<div style="width:10px;height:10px;border-radius:2px;background:'+sportColors[i%sportColors.length]+'"></div>'
+              +'<span style="font-size:15px;font-weight:600">'+x[0]+'</span>'
+              +'</div>'
+              +'<div style="text-align:right">'
+              +'<div style="font-size:14px;color:#1d6ef5">'+x[1].count+'× · Ø '+Math.round(x[1].totalMin/x[1].count)+' Min</div>'
+              +'</div></div>';
+          }).join(''),
+        '</div>',
+      '</div>',
+    ].join('') : '',
+
+    // ─── SCHLAF CHART ──────────────────────────────────────────
+    last30.length>1 ? [
+      '<div class="card">',
+        '<div class="lbl">😴 Schlaf · letzte '+last30.length+' Tage</div>',
+        svgChart(sleepData,'#a78bfa','Schlaf','h',7,120,false),
+        '<div style="display:flex;gap:12px;font-size:12px;color:#4a6080;margin-top:4px">',
+          '<span><span style="color:#a78bfa">━</span> Schlafdauer</span>',
+          '<span><span style="color:#22d3a0">- -</span> Ziel 7h</span>',
+          '<span>Ø '+avgSleep+'h</span>',
+        '</div>',
+      '</div>',
+    ].join('') : '',
+
+    // ─── ERNÄHRUNG DONUT ───────────────────────────────────────
+    entries.length>0 ? [
+      '<div class="card">',
+        '<div class="lbl">🍽️ Ernährung · '+entries.length+' Tage</div>',
+        donutChart([foodGut,foodMixed,foodCheat,entries.length-foodGut-foodMixed-foodCheat],
+          ['#22d3a0','#f5c842','#f55a42','#0d2040'],
+          ['Gesund','Gemischt','Cheat','Offen']),
+      '</div>',
+    ].join('') : '',
+
+    // ─── PERFORMANCE SCORE ─────────────────────────────────────
+    perfData.length>1 ? [
+      '<div class="card">',
+        '<div class="lbl">⭐ Performance Score</div>',
+        svgChart(perfData, function(d){return d.v>=70?'#22d3a0':d.v>=40?'#f5c842':'#f55a42';}[0]||'#1d6ef5','Score','%',70,120,true),
+        '<div style="display:flex;gap:12px;font-size:12px;color:#4a6080;margin-top:4px">',
+          '<span><span style="color:#22d3a0">●</span> 70%+ Top</span>',
+          '<span><span style="color:#f5c842">●</span> 40–70%</span>',
+          '<span><span style="color:#f55a42">●</span> unter 40%</span>',
+        '</div>',
+        '<div style="margin-top:14px">',
+          perfData.slice(-7).map(function(d){
+            const col=d.v>=70?'#22d3a0':d.v>=40?'#f5c842':'#f55a42';
+            return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">'
+              +'<div style="font-size:12px;color:#4a6080;min-width:40px">'+d.label+'</div>'
+              +'<div style="flex:1;height:10px;background:#0d2040;border-radius:5px">'
+              +'<div style="width:'+d.v+'%;height:100%;background:'+col+';border-radius:5px"></div></div>'
+              +'<div style="font-size:13px;color:'+col+';min-width:34px;text-align:right">'+d.v+'%</div>'
+              +'</div>';
+          }).join(''),
+        '</div>',
+      '</div>',
+    ].join('') : '',
+
+  ].join('');
+
+  content.innerHTML = html;
+}
+
+// ── ACTIONS ────────────────────────────────────────────────────────────────
+function switchTab(t){
+  tab=t;
+  document.querySelectorAll('.tab-btn').forEach(function(b){
+    b.classList.remove('active');
+    b.querySelectorAll('span').forEach(function(s){s.style.color='#4a6080';});
+  });
+  const btn=document.getElementById('tab-'+t);
+  if(btn){btn.classList.add('active');btn.querySelectorAll('span').forEach(function(s){s.style.color='#1d6ef5';});}
+  render();
+}
+
+function setTrack(field, val){
+  const dk=todayKey();
+  if(!tracker[dk]) tracker[dk]={};
+  tracker[dk][field]=val;
+  save('tracker3',tracker);
+  render();
+}
+
+function markDone(i){
+  doneDays[i]=true;
+  save('doneDays3',doneDays);
+  const dk=todayKey();
+  if(!tracker[dk]) tracker[dk]={};
+  tracker[dk].sportMin=(tracker[dk].sportMin||30);
+  save('tracker3',tracker);
+  const c=CONGRATS[Math.floor(Math.random()*CONGRATS.length)];
+  showModal(c.title,c.msg);
+  render();
+}
+
+function saveDay(){
+  const dk=todayKey();
+  if(!tracker[dk]) tracker[dk]={};
+  tracker[dk].saved=true;
+  save('tracker3',tracker);
+  showModal('TAG GESPEICHERT! 💾','Heiko, '+dk+' ist gesichert. Morgen geht der Kampf weiter!');
+}
+
+function toggleShop(k){
+  shopChecked[k]=!shopChecked[k];
+  save('shop3',shopChecked);
+  render();
+}
+
+function clearShop(){
+  shopChecked={};
+  save('shop3',{});
+  render();
+}
+
+function exportData(){
+  const data = {
+    tracker: load('tracker3',{}),
+    bauchHist: load('bauchHist',[]),
+    gewHist: load('gewHist',[]),
+    challengeStart: load('challengeStart',null),
+    weeklyPlan: load('plan3', PLAN),
+    exportDate: new Date().toISOString(),
+    version: '1.0'
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'wampe-backup-'+todayKey()+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showModal('✅ Backup gespeichert!','Heiko, deine Daten wurden als wampe-backup-'+todayKey()+'.json gespeichert. In iCloud oder Google Drive ablegen!');
+}
+
+function importData(){
+  const inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = '.json';
+  inp.onchange = function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = function(ev){
+      try{
+        const data = JSON.parse(ev.target.result);
+        if(data.tracker) save('tracker3', data.tracker);
+        if(data.bauchHist) save('bauchHist', data.bauchHist);
+        if(data.gewHist) save('gewHist', data.gewHist);
+        if(data.challengeStart) save('challengeStart', data.challengeStart);
+        if(data.weeklyPlan) save('plan3', data.weeklyPlan);
+        tracker = load('tracker3',{});
+        weeklyPlan = load('plan3', PLAN);
+        showModal('✅ Daten wiederhergestellt!','Heiko, alle deine Daten sind wieder da! Backup vom '+data.exportDate.slice(0,10));
+        updateHeader();
+        render();
+      }catch(err){
+        showModal('❌ Fehler','Die Datei konnte nicht gelesen werden. Bitte das richtige Backup auswählen!');
+      }
+    };
+    reader.readAsText(file);
+  };
+  inp.click();
+}
+
+function startChallenge(){
+  if(confirm('30-Tage-Challenge jetzt starten, Heiko?')){
+    save('challengeStart',new Date().toISOString());
+    updateHeader();
+    render();
+  }
+}
+
+function showSettings(){
+  const current = load('anthropicKey','');
+  const key = prompt('Anthropic API Key eingeben (beginnt mit sk-ant-):\n\nKey wird nur lokal auf deinem Gerät gespeichert – nie übertragen!', current);
+  if(key !== null){
+    save('anthropicKey', key.trim());
+    showModal('✅ API Key gespeichert!', 'Foto-Analyse ist jetzt aktiviert, Heiko!');
+  }
+}
+
+function saveGewicht(){
+  const inp = document.getElementById('gew-inp');
+  if(!inp||!inp.value) return;
+  const kg = parseFloat(inp.value);
+  if(kg<50||kg>300){alert('Bitte realistischen Wert eingeben!');return;}
+  setTrack('gewicht', kg);
+  const hist = load('gewHist',[]);
+  const today = todayKey();
+  const ex = hist.findIndex(function(h){return h.date===today;});
+  if(ex>=0) hist[ex].kg = kg; else hist.push({date:today, kg:kg});
+  save('gewHist', hist);
+  const diff = hist.length>1 ? Math.round((hist[0].kg - kg)*10)/10 : null;
+  showModal(
+    '⚖️ '+kg+' kg gespeichert!',
+    diff>0 ? '🎉 −'+diff+' kg seit Start! Heiko, du machst das!'
+    : diff<0 ? 'Noch +'+Math.abs(diff)+' kg – dran bleiben!'
+    : 'Erster Wert gespeichert. Ziel: 100 kg. Du schaffst das, Heiko!'
+  );
+  render();
+}
+
+function saveBauchCheck(){
+  const inp = document.getElementById('bauch-check-inp');
+  if(!inp||!inp.value) return;
+  const cm = parseFloat(inp.value);
+  if(cm<60||cm>200){alert('Bitte realistischen Wert eingeben!');return;}
+  // Mit Tagesdaten speichern
+  setTrack('bauchUmfang', cm);
+  // Auch in History
+  const hist = load('bauchHist',[]);
+  const today = todayKey();
+  const existing = hist.findIndex(function(h){return h.date===today;});
+  if(existing>=0) hist[existing].cm = cm;
+  else hist.push({date:today, cm:cm});
+  save('bauchHist', hist);
+  save('lastBauch', today);
+  const diff = hist.length>1 ? Math.round((hist[0].cm - cm)*10)/10 : null;
+  showModal(
+    '📏 '+cm+' cm gespeichert!',
+    diff>0 ? '🎉 −'+diff+' cm seit Start! Weiter so, Heiko!'
+    : diff<0 ? 'Noch +'+Math.abs(diff)+' cm – dran bleiben, Heiko!'
+    : 'Erster Messwert gespeichert. Nächste Messung: nächsten Sonntag!'
+  );
+  render();
+}
+
+function saveBauch(){
+  const inp=document.getElementById('bauch-inp');
+  if(!inp||!inp.value) return;
+  const cm=parseFloat(inp.value);
+  if(cm<60||cm>200){alert('Bitte realistischen Wert eingeben!');return;}
+  const hist=load('bauchHist',[]);
+  hist.push({date:todayKey(),cm:cm});
+  save('bauchHist',hist);
+  save('lastBauch',todayKey());
+  const diff=hist.length>1?Math.round((hist[0].cm-cm)*10)/10:null;
+  const bb=document.getElementById('hdr-bauch');
+  if(bb){
+    bb.innerHTML='<div style="background:#0a2010;border:2px solid #22d3a0;border-radius:10px;padding:14px">'
+      +'<div class="bc" style="font-size:20px;font-weight:700;color:#22d3a0">✅ '+cm+' cm gespeichert!</div>'
+      +(diff>0?'<div style="font-size:16px;color:#22d3a0;margin-top:4px">🎉 −'+diff+' cm seit Start!  Weiter so, Heiko!</div>'
+        :diff<0?'<div style="font-size:16px;color:#f5c842;margin-top:4px">Noch +'+Math.abs(diff)+' cm – dran bleiben!</div>'
+        :'<div style="font-size:14px;color:#4a6080;margin-top:4px">Erster Messwert. Nächste Messung in einer Woche!</div>')
+      +'</div>';
+  }
+}
+
+function showModal(title,msg){
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-msg').textContent=msg;
+  document.getElementById('modal').style.display='flex';
+}
+
+async function analyzeFood(input){
+  if(!input.files||!input.files[0]) return;
+  const file=input.files[0];
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const preview=document.getElementById('photo-preview');
+    const previewImg=document.getElementById('preview-img');
+    const loading=document.getElementById('calorie-loading');
+    const result=document.getElementById('calorie-result');
+    const resultText=document.getElementById('calorie-text');
+    previewImg.src=e.target.result;
+    preview.style.display='block';
+    loading.style.display='block';
+    result.style.display='none';
+    const base64=e.target.result.split(',')[1];
+    try{
+      const apiKey = load('anthropicKey','');
+      if(!apiKey){
+        showModal('API Key benötigt','Für die Foto-Analyse brauchst du einen Anthropic API Key. Einmal unter Einstellungen eingeben – dann funktioniert der Foto-Upload!');
+        return;
+      }
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:800,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:file.type||'image/jpeg',data:base64}},
+            {type:'text',text:'Analysiere dieses Essensfoto für Heiko (46J, 120kg, Ziel 100kg, 2000 kcal/Tag). Antworte NUR so:\n🍽️ Was ich sehe: [kurze Beschreibung]\n🔥 Kalorien: [Zahl] kcal\n💪 Protein: ca. [Zahl]g\n⚖️ Bewertung: [1 Satz für Heikos Ziel]\n💡 Tipp: [1 kurzer Tipp]'}
+          ]}]
+        })
+      });
+      const data=await resp.json();
+      const text=data.content?.[0]?.text||'Analyse fehlgeschlagen.';
+      resultText.innerHTML=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+      result.style.display='block';
+      const kcalMatch=text.match(/(\d+)\s*kcal/i);
+      if(kcalMatch) setTrack('fotoKcal',parseInt(kcalMatch[1]));
+    }catch(err){
+      resultText.innerHTML='⚠️ Analyse nicht möglich. Bitte erneut versuchen.';
+      result.style.display='block';
+    }
+    loading.style.display='none';
+  };
+  reader.readAsDataURL(file);
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+const lastDate=load('lastDate3','');
+const today=todayKey();
+if(lastDate!==today){
+  doneDays={};
+  save('doneDays3',{});
+  save('lastDate3',today);
+}
+
+function msUntilMidnight(){const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);return m-n;}
+setTimeout(function(){doneDays={};save('doneDays3',{});save('lastDate3',todayKey());render();updateHeader();},msUntilMidnight());
+
+updateHeader();
+render();
+setInterval(function(){updateHeader();if(tab==='heute')render();},60000);
+</script>
+</body>
+</html>
